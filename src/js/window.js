@@ -2,23 +2,27 @@ const { BrowserWindow } = require('electron');
 const path = require("path");
 
 class Window {
-    constructor(openDev) {
+    constructor(width, height, dev = false) {
         this.mainWindow = new BrowserWindow({
-            width: 1920,
-            height: 1080,
+            width: width,
+            height: height,
             webPreferences: {
                 preload: path.join(__dirname, '../preload.js'),
                 nodeIntegration: true,
                 contextIsolation: true,
                 enableRemoteModule: true,
             },
-            icon: path.join(__dirname, '../images/favicon.png'),
+            icon: path.join(__dirname, '../assets/favicon.png'),
         });
 
-        if (openDev) {
+        if (dev) {
             this.mainWindow.webContents.openDevTools();
         }
-        this.mainWindow.loadFile('./src/index.html');
+        this.mainWindow.loadFile('./src/pages/index.html');
+
+        this.mainWindow.on('closed', () => {
+            this.mainWindow = null;
+        });
     }
 }
 

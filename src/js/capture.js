@@ -1,18 +1,18 @@
 const {ipcMain, screen, desktopCapturer} = require("electron");
-const {createWorker} = require("tesseract.js");
 const Reader = require('./ocr_reader.js');
+const Resolution = require('./class/resolution.js');
 
 class Capture {
     constructor() {
         ipcMain.on('capture-screenshot', async (event) => {
             const screenShotInfo = await captureScreen();
-            const dataURL = screenShotInfo.toDataURL();
-
-            const text = await new Reader(dataURL).read();
+            const dataURL = screenShotInfo.thumbnail.toDataURL();
+            const resolution = screenShotInfo.resolution;
+            const data = await new Reader(dataURL, resolution).read();
 
             event.sender.send('screenshot-capture', {
                 dataURL: dataURL,
-                text: text
+                data: data
             });
         });
 
@@ -28,7 +28,10 @@ class Capture {
             const sources = await desktopCapturer.getSources(options);
             const primarySource = sources.find(({display_id}) => display_id == primaryDisplay.id);
 
-            return primarySource.thumbnail;
+            return {
+                thumbnail: primarySource.thumbnail,
+                resolution: new Resolution(width, height)
+            };
         }
     }
 }

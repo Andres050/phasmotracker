@@ -1,48 +1,88 @@
-const Rectangle = require('./rectangle.js');
-const { createWorker, PSM } = require("tesseract.js");
+const Rectangle = require('./class/rectangle.js');
+const Range = require("./class/range.js");
+const { createWorker } = require("tesseract.js");
 
 class Reader {
-    constructor(dataURL) {
+    constructor(dataURL, resolution) {
         this.dataURL = dataURL;
-        this.rectangles = [
-            /** HEADER */
-            new Rectangle("header", 316, 155, 700, 250),
+        this.resolution = resolution;
 
-            /** TABS */
-            new Rectangle("tab", 316, 255, 550, 200),
-            new Rectangle("tab", 1110, 255, 400, 200),
-            new Rectangle("tab", 1580, 255, 550, 200),
+        /** REMINDER, ONLY THE MONEY COURSE THE TEXT THERE IS MORE PROBLEMS */
+        this.numbers = [
+            /** MISSIONS */
+            new Rectangle("Correct", 1450, 450, 180, 100, new Range(0, 100)),
+            new Rectangle("Mission1", 1450, 550, 180, 100, new Range(25, 30)),
+            new Rectangle("Mission2", 1450, 600, 180, 100, new Range(25, 30)),
+            new Rectangle("Mission3", 1450, 690, 180, 100, new Range(25, 30)),
 
-            /** MISSIONS PAPER !Todo */
-            new Rectangle("correct", 380, 450, 1250, 80),
-            new Rectangle("mission1", 380, 500, 1250, 80),
-            new Rectangle("mission2", 380, 550, 1250, 80),
-            new Rectangle("mission3", 380, 600, 1250, 80),
+            new Rectangle("Investigation Bonus", 1450, 750, 200, 100, new Range(0, 190)),
+            new Rectangle("Rewards", 1450, 800, 200, 100, new Range(0, 2400)),
 
-            //new Rectangle("ghost", 1580, 255, 550, 200),
-
-            /** LEVEL && XP !Todo */
-            //new Rectangle("level", 1580, 255, 550, 200),
-            //new Rectangle("xp", 1580, 255, 550, 200),
-
+            /** LEVEL && XP */
+            new Rectangle("level", 1810, 750, 100, 70, new Range(0, 1000)),
+            new Rectangle("xp", 1700, 880, 300, 200, new Range(0, 10000)),
         ];
+
+        this.texts = [
+            new Rectangle("Ghost Type", 1300, 1200, 350, 200),
+        ]
     }
 
     async read() {
-        const worker = await createWorker('eng');
+        const texts = await this.text();
+        const numbers = await this.number();
 
-        const rectangles = this.rectangles;
+        return [...texts, ...numbers];
+    }
+
+    async number() {
+        const worker = await createWorker('eng');
+        await worker.setParameters({
+            tessedit_char_whitelist: '0123456789',
+        });
+
+        const rectangles = this.numbers;
         const values = [];
         for (let i = 0; i < rectangles.length; i++) {
             const rectangleItem = rectangles[i];
-
-            const { data: { text } } = await worker.recognize(this.dataURL, { rectangle: rectangleItem.toArray() });
-            values.push({
-                name: rectangleItem.name,
-                text: text
+            const { data: { text } } = await worker.recognize(this.dataURL, {
+                rectangle: rectangleItem.toArray()
             });
+
+            const item = {
+                name: rectangleItem.name,
+                text: rectangleItem.range.val(parseFloat(text.replaceAll('\n', ''))),
+                coordinates: rectangleItem.toArray()
+            };
+
+            console.log(item);
+            values.push(item);
         }
 
+        await worker.terminate();
+        return values;
+    }
+
+    async text() {
+        const worker = await createWorker('eng');
+        const rectangles = this.texts;
+
+        const values = [];
+        for (let i = 0; i < rectangles.length; i++) {
+            const rectangleItem = rectangles[i];
+            const { data: { text } } = await worker.recognize(this.dataURL, {
+                rectangle: rectangleItem.toArray()
+            });
+
+            const item = {
+                name: rectangleItem.name,
+                text: text.replaceAll('\n', ''),
+                coordinates: rectangleItem.toArray()
+            };
+
+            console.log(item);
+            values.push(item);
+        }
 
         await worker.terminate();
         return values;

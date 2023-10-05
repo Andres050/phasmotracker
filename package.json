@@ -19,6 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
+    "sharp": "^0.32.6",
     "tesseract.js": "^5.0.0"
   },
   "devDependencies": {

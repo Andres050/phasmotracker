@@ -14,7 +14,7 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.whenReady().then(() => {const win = new Window();}).then(function () {
+app.whenReady().then(() => {const win = new Window(true);}).then(function () {
   const Notification = new Notifications();
   Notification.welcome.show();
 });

@@ -8,7 +8,7 @@ class Capture {
             const screenShotInfo = await captureScreen();
             const dataURL = screenShotInfo.toDataURL();
 
-            const text = await captureText(dataURL);
+            const text = await new Reader(dataURL).read();
 
             event.sender.send('screenshot-capture', {
                 dataURL: dataURL,
@@ -29,13 +29,6 @@ class Capture {
             const primarySource = sources.find(({display_id}) => display_id == primaryDisplay.id);
 
             return primarySource.thumbnail;
-        }
-
-        async function captureText(dataURL) {
-            const worker = await createWorker('eng');
-            const { data: { text } } = await worker.recognize(dataURL);
-            await worker.terminate();
-            return text;
         }
     }
 }

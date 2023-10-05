@@ -2,7 +2,7 @@ const { BrowserWindow } = require('electron');
 const path = require("path");
 
 class Window {
-    constructor() {
+    constructor(openDev) {
         this.mainWindow = new BrowserWindow({
             width: 1920,
             height: 1080,
@@ -14,6 +14,10 @@ class Window {
             },
             icon: path.join(__dirname, '../images/favicon.png'),
         });
+
+        if (openDev) {
+            this.mainWindow.webContents.openDevTools();
+        }
         this.mainWindow.loadFile('./src/index.html');
     }
 }

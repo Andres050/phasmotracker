@@ -1,6 +1,8 @@
-const {ipcMain, screen, desktopCapturer} = require("electron");
+const { app, ipcMain, screen, desktopCapturer} = require("electron");
+const { appendFileSync } = require("fs");
 const Reader = require('./ocr_reader.js');
 const Resolution = require('./class/resolution.js');
+const Notifications = require("./notifications");
 
 class Capture {
     constructor() {
@@ -15,6 +17,17 @@ class Capture {
                 data: data,
                 resolution: resolution
             });
+        });
+
+        ipcMain.on('next-screenshot', async (event, ...args) => {
+            try {
+                appendFileSync("./phasmophobia.csv", await setDataCSV(args[0]));
+
+                const Notification = new Notifications();
+                Notification.captured.show();
+            } catch (err) {
+                console.error(err);
+            }
         });
 
         async function captureScreen() {
@@ -33,6 +46,16 @@ class Capture {
                 thumbnail: primarySource.thumbnail,
                 resolution: new Resolution(width, height)
             };
+        }
+
+        async function setDataCSV(args) {
+            let csv = "";
+            for (let i = 0; i < args.length; i++) {
+                let capture = args[i];
+                csv += capture.text+',';
+            }
+
+            return csv.slice(0, -1)+"\n";
         }
     }
 }

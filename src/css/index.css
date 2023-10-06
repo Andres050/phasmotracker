@@ -1,0 +1,43 @@
+@font-face {
+  font-family: "Lazy Dog";
+  src: url('../assets/fonts/lazy_dog.ttf') format('truetype');
+}
+
+body {
+  font-family: Lazy Dog, sans-serif;
+  background-color: #f0f0f0;
+  text-align: center;
+  margin: 0;
+  padding: 0 0 40px 0;
+  box-sizing: border-box;
+
+  background-image: url("../assets/bg.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.disabled {
+  color: rgba(0, 0, 0, 0.58) !important;
+}
+
+.c-phasmo__button:hover {
+  cursor: pointer;
+}
+
+.c-phasmo__button:not(.disabled):hover {
+  opacity: 0.7;
+}
+
+.c-phasmo__contract .c-phasmo__title {
+  width: 100% !important;
+}
+
+.c-phasmo__input--small.selected {
+  text-decoration: underline !important;
+}

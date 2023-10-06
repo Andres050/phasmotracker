@@ -3,34 +3,37 @@ const fuzzy = require('fuzzy');
 class Ghost {
     constructor() {
         this.ghosts = [
-            'Banshee',
-            'Demon',
-            'Deogen',
-            'Goryo',
-            'Hantu',
-            'Jinn',
-            'Mare',
-            'Moroi',
-            'Myling',
-            'Obake',
-            'Oni',
-            'Onryo',
+            'Spirit',
+            'Wraith',
             'Phantom',
             'Poltergeist',
-            'Raiju',
+            'Banshee',
+            'Jinn',
+            'Mare',
             'Revenant',
             'Shade',
-            'Spirit',
-            'Thaye',
-            'The Mimic',
-            'The Twins',
-            'Wraith',
-            'Yokai',
+            'Demon',
             'Yurei',
+            'Oni',
+            'Yokai',
+            'Hantu',
+            'Goryo',
+            'Myling',
+            'Onryo',
+            'The Twins',
+            'Raiju',
+            'Obake',
+            'The Mimic',
+            'Moroi',
+            'Deogen',
+            'Thaye',
         ];
     }
 
     val(text) {
+        if (text.length === 0)
+            return "";
+
         let mostSimilarOption = null;
         let highestSimilarity = 0;
 
@@ -53,6 +56,10 @@ class Ghost {
         const union = new Set([...set1, ...set2]);
 
         return intersection.size / union.size;
+    }
+
+    toArray() {
+        return this.ghosts;
     }
 }
 

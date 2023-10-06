@@ -14,15 +14,15 @@ class Reader {
         this.numbers = [
             /** MISSIONS */
             new Capture("Correct", new Rectangle(1450, 450, 180, 100), new Range(0, 100)),
-            new Capture("Mission1", new Rectangle( 1450, 550, 180, 100), new Range(25, 30)),
-            new Capture("Mission2", new Rectangle( 1450, 600, 180, 100), new Range(25, 30)),
-            new Capture("Mission3", new Rectangle( 1450, 690, 180, 100), new Range(25, 30)),
-
             new Capture("Investigation Bonus", new Rectangle( 1450, 750, 200, 100), new Range(0, 190)),
 
+            new Capture("Mission 1", new Rectangle( 1450, 550, 180, 100), new Range(25, 30)),
+            new Capture("Mission 2", new Rectangle( 1450, 600, 180, 100), new Range(25, 30)),
+            new Capture("Mission 3", new Rectangle( 1450, 690, 180, 100), new Range(25, 30)),
+
             /** LEVEL && XP */
-            new Capture("level", new Rectangle( 1810, 750, 100, 70), new Range(0, 1000)),
-            new Capture("xp", new Rectangle( 1700, 880, 300, 200), new Range(0, 10000)),
+            new Capture("Level", new Rectangle( 1810, 750, 100, 70), new Range(0, 1000)),
+            new Capture("Xp", new Rectangle( 1700, 880, 300, 200), new Range(0, 10000)),
         ];
 
         this.floats = [

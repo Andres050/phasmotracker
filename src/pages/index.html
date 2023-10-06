@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PhasmoTracker - By AndresAndMomo!</title>
+  <title>PhasmoTracker by AndresAndMomo!</title>
 
   <link rel="stylesheet"
         href="../css/mobile.css"
@@ -16,6 +16,8 @@
   <link rel="stylesheet"
         href="../css/desktop.css"
         media="(min-width: 1280px)">
+
+  <link rel="stylesheet" href="../css/index.css">
 </head>
 <body>
   <div class="c-sections">
@@ -23,33 +25,53 @@
       PhasmoTracker by Andre&Momo
     </h1>
     <header class="c-phasmo__header">
-      <a class="c-phasmo__button">
+      <a onclick="setTab(this)" data-index-class=".js-home" class="c-phasmo__button">
         Home
       </a>
-      <a class="c-phasmo__button">
-        Screen Shot
+      <a onclick="setTab(this)" id="screenshot-info" data-index-class=".js-screenshot-info" class="c-phasmo__button disabled">
+        Screenshot Info
       </a>
-      <a class="c-phasmo__button">
-        Excel
-      </a>
-      <a class="c-phasmo__button">
+      <a href="settings.html" class="c-phasmo__button">
         Settings
       </a>
     </header>
   </div>
 
-
-  <div class="c-content">
+  <div class="c-content js-tabs js-screenshot-info hidden">
     <div class="c-container">
-      <img id="screenshot-image" width="100%">
-      <div class="c-phasmo__header" style="padding-top: 30px">
-        <a class="c-phasmo__button" id="screenshot-button">
-          Capturar Pantalla
-        </a>
+      <div id="screenshot-image"></div>
+    </div>
+  </div>
+
+  <div class="c-content js-tabs js-home">
+    <div class="c-container">
+      <div class="c-phasmo__contract">
+        <h1 class="c-phasmo__title">
+          Contract Info
+        </h1>
+        <div id="screenshot-info-content" class="c-phasmo__contract__grid"></div>
       </div>
     </div>
   </div>
 
+  <div class="c-content">
+    <div class="c-container">
+      <div class="c-phasmo__contract" style="padding-top: 30px">
+        <h1 class="c-phasmo__title">
+          Ghost Selected
+        </h1>
+        <div id="screenshot-ghosts-content" class="c-phasmo__contract__grid--small"></div>
+      </div>
+      <div class="c-phasmo__header" style="padding-top: 60px">
+        <a class="c-phasmo__button" id="screenshot-button">
+          Capturar Pantalla
+        </a>
+        <a class="c-phasmo__button hidden" id="screenshot-next">
+          Next
+        </a>
+      </div>
+    </div>
+  </div>
   <script src="../renderer.js"></script>
 </body>
 </html>

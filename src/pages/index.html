@@ -2,33 +2,52 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PhasmoTracker - By AndresAndMomo!</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      text-align: center;
-    }
-    .button-container {
-      margin-top: 20px;
-    }
-    .button {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #007BFF;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-      font-size: 18px;
-    }
-  </style>
+
+  <link rel="stylesheet"
+        href="../css/mobile.css"
+        media="(max-width: 640px)">
+
+  <link rel="stylesheet"
+        href="../css/tablet.css"
+        media="(min-width: 640px) and (max-width: 1280px)">
+
+  <link rel="stylesheet"
+        href="../css/desktop.css"
+        media="(min-width: 1280px)">
 </head>
 <body>
-  <img id="screenshot-image" width="100%">
-  <p id="text"></p>
-  <div class="button-container">
-    <button class="button" id="screenshot-button">Capturar Pantalla</button>
+  <div class="c-sections">
+    <h1 class="c-phasmo__title">
+      PhasmoTracker by Andre&Momo
+    </h1>
+    <header class="c-phasmo__header">
+      <a class="c-phasmo__button">
+        Home
+      </a>
+      <a class="c-phasmo__button">
+        Screen Shot
+      </a>
+      <a class="c-phasmo__button">
+        Excel
+      </a>
+      <a class="c-phasmo__button">
+        Settings
+      </a>
+    </header>
+  </div>
+
+
+  <div class="c-content">
+    <div class="c-container">
+      <img id="screenshot-image" width="100%">
+      <div class="c-phasmo__header" style="padding-top: 30px">
+        <a class="c-phasmo__button" id="screenshot-button">
+          Capturar Pantalla
+        </a>
+      </div>
+    </div>
   </div>
 
   <script src="../renderer.js"></script>

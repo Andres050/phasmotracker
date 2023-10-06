@@ -19,10 +19,6 @@ class Window {
             this.mainWindow.webContents.openDevTools();
         }
         this.mainWindow.loadFile('./src/pages/index.html');
-
-        this.mainWindow.on('closed', () => {
-            this.mainWindow = null;
-        });
     }
 }
 

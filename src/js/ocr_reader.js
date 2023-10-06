@@ -1,5 +1,8 @@
 const Rectangle = require('./class/rectangle.js');
 const Range = require("./class/range.js");
+const Capture = require("./class/capture.js");
+const Ghost = require("./class/ghost.js");
+const Float = require("./class/float.js");
 const { createWorker } = require("tesseract.js");
 
 class Reader {
@@ -10,83 +13,64 @@ class Reader {
         /** REMINDER, ONLY THE MONEY COURSE THE TEXT THERE IS MORE PROBLEMS */
         this.numbers = [
             /** MISSIONS */
-            new Rectangle("Correct", 1450, 450, 180, 100, new Range(0, 100)),
-            new Rectangle("Mission1", 1450, 550, 180, 100, new Range(25, 30)),
-            new Rectangle("Mission2", 1450, 600, 180, 100, new Range(25, 30)),
-            new Rectangle("Mission3", 1450, 690, 180, 100, new Range(25, 30)),
+            new Capture("Correct", new Rectangle(1450, 450, 180, 100), new Range(0, 100)),
+            new Capture("Mission1", new Rectangle( 1450, 550, 180, 100), new Range(25, 30)),
+            new Capture("Mission2", new Rectangle( 1450, 600, 180, 100), new Range(25, 30)),
+            new Capture("Mission3", new Rectangle( 1450, 690, 180, 100), new Range(25, 30)),
 
-            new Rectangle("Investigation Bonus", 1450, 750, 200, 100, new Range(0, 190)),
-            new Rectangle("Rewards", 1450, 800, 200, 100, new Range(0, 2400)),
+            new Capture("Investigation Bonus", new Rectangle( 1450, 750, 200, 100), new Range(0, 190)),
 
             /** LEVEL && XP */
-            new Rectangle("level", 1810, 750, 100, 70, new Range(0, 1000)),
-            new Rectangle("xp", 1700, 880, 300, 200, new Range(0, 10000)),
+            new Capture("level", new Rectangle( 1810, 750, 100, 70), new Range(0, 1000)),
+            new Capture("xp", new Rectangle( 1700, 880, 300, 200), new Range(0, 10000)),
+        ];
+
+        this.floats = [
+            new Capture("Rewards", new Rectangle( 1450, 800, 200, 100), new Float()),
         ];
 
         this.texts = [
-            new Rectangle("Ghost Type", 1300, 1200, 350, 200),
+            new Capture("Ghost Type", new Rectangle(1300, 1200, 350, 200), new Ghost()),
         ]
     }
 
     async read() {
-        const texts = await this.text();
-        const numbers = await this.number();
+        const texts = await this.rectangles(this.texts);
+        const numbers = await this.rectangles(this.numbers, '0123456789');
+        const floats = await this.rectangles(this.floats, '.,0123456789');
 
-        return [...texts, ...numbers];
+        return [...texts, ...numbers, ...floats];
     }
 
-    async number() {
+    async rectangles(captures, tessedit_char_whitelist = null) {
         const worker = await createWorker('eng');
-        await worker.setParameters({
-            tessedit_char_whitelist: '0123456789',
-        });
+        if (tessedit_char_whitelist) {
+            await worker.setParameters({
+                tessedit_char_whitelist: tessedit_char_whitelist,
+            });
+        }
 
-        const rectangles = this.numbers;
         const values = [];
-        for (let i = 0; i < rectangles.length; i++) {
-            const rectangleItem = rectangles[i];
+        for (let i = 0; i < captures.length; i++) {
+            const capture = captures[i];
+            const rectangleItem = capture.rectangle;
+
             const { data: { text } } = await worker.recognize(this.dataURL, {
                 rectangle: rectangleItem.toArray()
             });
 
             const item = {
-                name: rectangleItem.name,
-                text: rectangleItem.range.val(parseFloat(text.replaceAll('\n', ''))),
+                name: capture.name,
+                text: capture.filter.val(text.replaceAll('\n', '')),
                 coordinates: rectangleItem.toArray()
             };
 
-            console.log(item);
             values.push(item);
         }
 
         await worker.terminate();
         return values;
-    }
-
-    async text() {
-        const worker = await createWorker('eng');
-        const rectangles = this.texts;
-
-        const values = [];
-        for (let i = 0; i < rectangles.length; i++) {
-            const rectangleItem = rectangles[i];
-            const { data: { text } } = await worker.recognize(this.dataURL, {
-                rectangle: rectangleItem.toArray()
-            });
-
-            const item = {
-                name: rectangleItem.name,
-                text: text.replaceAll('\n', ''),
-                coordinates: rectangleItem.toArray()
-            };
-
-            console.log(item);
-            values.push(item);
-        }
-
-        await worker.terminate();
-        return values;
-    }
+    };
 }
 
 module.exports = Reader;

@@ -1,13 +1,11 @@
 const Range = require("./range.js");
 
 class Rectangle {
-    constructor(name, left, top, width, height, range = null) {
-        this.name = name;
+    constructor(left, top, width, height) {
         this.left = left;
         this.top = top;
         this.width = width;
         this.height = height;
-        this.range = range;
     }
 
     toArray() {

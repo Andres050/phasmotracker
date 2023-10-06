@@ -5,7 +5,7 @@ class Range {
     }
 
     val(num) {
-        return this.isValid(num) ? num : 0;
+        return this.isValid(parseInt(num)) ? parseInt(num) : 0;
     }
 
     isValid(num) {

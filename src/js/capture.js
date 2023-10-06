@@ -12,7 +12,8 @@ class Capture {
 
             event.sender.send('screenshot-capture', {
                 dataURL: dataURL,
-                data: data
+                data: data,
+                resolution: resolution
             });
         });
 

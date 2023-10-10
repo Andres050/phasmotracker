@@ -23,12 +23,13 @@ async function takeScreenshot() {
 async function saveScreenShot() {
     if (selectedGhost) {
         let currentData1 = structuredClone(currentData);
-        let data = currentData1.push({
+        currentData1.push({
             name: "Selected Ghost",
-            text: selectedGhost
+            text: selectedGhost,
+            order: 2
         });
 
-        console.log(currentData1);
+        currentData1.sort((a, b) =>  a.order - b.order);
         await window.screenshot.nextScreenShot(currentData1);
     } else {
         console.log(selectedGhost);
@@ -47,6 +48,7 @@ function setCoordinates(img, data) {
 
     for (let i = 0; i < data.length; i++) {
         let capture = data[i];
+        console.log(capture);
         let coordinates = capture.coordinates;
         ctx.strokeStyle = "#99ff33";
         ctx.lineWidth = 6;
@@ -67,7 +69,7 @@ function setCoordinates(img, data) {
 }
 
 function setTab(element) {
-    if (element.classList.has('disabled'))
+    if (element.classList && element.classList.contains('disabled'))
         return;
 
     let dataIndexClass = element.getAttribute('data-index-class');

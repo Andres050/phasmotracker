@@ -11,3 +11,13 @@ contextBridge.exposeInMainWorld('screenshot', {
     },
     nextScreenShot: (data) => ipcRenderer.send('next-screenshot', data),
 });
+
+contextBridge.exposeInMainWorld('settings', {
+    getSettings: () => ipcRenderer.send('get-settings'),
+    getSettingsRead: (callback) => {
+        ipcRenderer.on('get-settings-read', (event, args) => callback(event, args));
+    },
+    setSettingsCoordinates: (data) => ipcRenderer.send('set-settings-coordinates', data),
+    setSettingsOrder: (data) => ipcRenderer.send('set-settings-order', data),
+});
+

@@ -39,5 +39,30 @@ body {
 }
 
 .c-phasmo__input--small.selected {
+  filter: hue-rotate(180deg);
   text-decoration: underline !important;
 }
+.c-phasmo__input--small:not(.disabled):hover {
+  opacity: 0.7;
+}
+
+.c-sticky {
+  position: fixed;
+  top: 160px;
+}
+
+@media (max-width: 1024px) {
+  .c-sticky {
+    position: fixed;
+    top: 160px;
+  }
+}
+
+.c-sticky_bottom {
+  -ms-flex-line-pack: end;
+  align-content: flex-end;
+  display: grid;
+  padding-bottom: 96px;
+}
+
+/** TO RESPONSIVE */

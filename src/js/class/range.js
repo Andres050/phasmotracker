@@ -1,5 +1,6 @@
 class Range {
     constructor(min = 0, max = 100) {
+        this.type = "Range";
         this.min = min;
         this.max = max;
     }

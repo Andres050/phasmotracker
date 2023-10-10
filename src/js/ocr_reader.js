@@ -1,43 +1,23 @@
-const Rectangle = require('./class/rectangle.js');
-const Range = require("./class/range.js");
-const Capture = require("./class/capture.js");
-const Ghost = require("./class/ghost.js");
-const Float = require("./class/float.js");
 const { createWorker } = require("tesseract.js");
+const Settings = require("./settings.js");
+const Float = require("./class/float");
+const Ghost = require("./class/ghost");
+const Range = require("./class/range");
 
 class Reader {
     constructor(dataURL, resolution) {
         this.dataURL = dataURL;
         this.resolution = resolution;
-
-        /** REMINDER, ONLY THE MONEY COURSE THE TEXT THERE IS MORE PROBLEMS */
-        this.numbers = [
-            /** MISSIONS */
-            new Capture("Correct", new Rectangle(1450, 450, 180, 100), new Range(0, 100)),
-            new Capture("Investigation Bonus", new Rectangle( 1450, 750, 200, 100), new Range(0, 190)),
-
-            new Capture("Mission 1", new Rectangle( 1450, 550, 180, 100), new Range(25, 30)),
-            new Capture("Mission 2", new Rectangle( 1450, 600, 180, 100), new Range(25, 30)),
-            new Capture("Mission 3", new Rectangle( 1450, 690, 180, 100), new Range(25, 30)),
-
-            /** LEVEL && XP */
-            new Capture("Level", new Rectangle( 1810, 750, 100, 70), new Range(0, 1000)),
-            new Capture("Xp", new Rectangle( 1700, 880, 300, 200), new Range(0, 10000)),
-        ];
-
-        this.floats = [
-            new Capture("Rewards", new Rectangle( 1450, 800, 200, 100), new Float()),
-        ];
-
-        this.texts = [
-            new Capture("Ghost Type", new Rectangle(1300, 1200, 350, 200), new Ghost()),
-        ]
     }
 
     async read() {
-        const texts = await this.rectangles(this.texts);
-        const numbers = await this.rectangles(this.numbers, '0123456789');
-        const floats = await this.rectangles(this.floats, '.,0123456789');
+        const settings = new Settings().read();
+
+        let types = this.groupBy(settings, "type");
+
+        const texts = await this.rectangles(types.text);
+        const numbers = await this.rectangles(types.number, '0123456789');
+        const floats = await this.rectangles(types.float, '.,0123456789');
 
         return [...texts, ...numbers, ...floats];
     }
@@ -56,13 +36,15 @@ class Reader {
             const rectangleItem = capture.rectangle;
 
             const { data: { text } } = await worker.recognize(this.dataURL, {
-                rectangle: rectangleItem.toArray()
+                rectangle: rectangleItem
             });
 
+            //console.log(capture);
             const item = {
                 name: capture.name,
-                text: capture.filter.val(text.replaceAll('\n', '')),
-                coordinates: rectangleItem.toArray()
+                text: this.setTypeText(capture.filter, text.replaceAll('\n', '')),
+                coordinates: rectangleItem,
+                order: capture.order
             };
 
             values.push(item);
@@ -71,6 +53,27 @@ class Reader {
         await worker.terminate();
         return values;
     };
+
+    setTypeText(filter, text) {
+        switch (filter.type) {
+            case "Range":
+                return new Range(filter.min, filter.max).val(text);
+            case "Float":
+                return new Float().val(text);
+            case "Ghost":
+                return new Ghost().val(text);
+            default:
+                return text;
+        }
+    }
+
+    groupBy(arr, property) {
+        return arr.reduce(function(memo, x) {
+            if (!memo[x[property]]) { memo[x[property]] = []; }
+            memo[x[property]].push(x);
+            return memo;
+        }, {});
+    }
 }
 
 module.exports = Reader;

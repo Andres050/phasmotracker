@@ -2,6 +2,8 @@ const fuzzy = require('fuzzy');
 
 class Ghost {
     constructor() {
+        this.type = "Ghost";
+
         this.ghosts = [
             'Spirit',
             'Wraith',

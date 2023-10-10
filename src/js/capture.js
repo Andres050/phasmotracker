@@ -3,6 +3,7 @@ const { appendFileSync } = require("fs");
 const Reader = require('./ocr_reader.js');
 const Resolution = require('./class/resolution.js');
 const Notifications = require("./notifications");
+const path = require("path");
 
 class Capture {
     constructor() {
@@ -12,6 +13,7 @@ class Capture {
             const resolution = screenShotInfo.resolution;
             const data = await new Reader(dataURL, resolution).read();
 
+            console.log(data);
             event.sender.send('screenshot-capture', {
                 dataURL: dataURL,
                 data: data,
@@ -19,9 +21,9 @@ class Capture {
             });
         });
 
-        ipcMain.on('next-screenshot', async (event, ...args) => {
+        ipcMain.on('next-screenshot', async (event, ...data) => {
             try {
-                appendFileSync("./phasmophobia.csv", await setDataCSV(args[0]));
+                appendFileSync(path.join(__dirname, '../data/phasmophobia.csv'), await setDataCSV(data[0]));
 
                 const Notification = new Notifications();
                 Notification.captured.show();

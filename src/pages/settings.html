@@ -37,5 +37,90 @@
     </header>
   </div>
 
+  <div class="c-content">
+    <div class="c-container">
+      <div class="c-phasmo__contract" style="padding-top: 30px">
+        <h1 class="c-phasmo__title">
+          Settings
+        </h1>
+      </div>
+      <div>
+        <header class="c-phasmo__header">
+          <a href="settings.html" class="c-phasmo__button">
+            Coordinates
+          </a>
+          <a onclick="setTab(this)" class="c-phasmo__button" data-index-class=".js-colors">
+            Colors
+          </a>
+          <a class="c-phasmo__button">
+            How it works
+          </a>
+        </header>
+      </div>
+
+      <div id="coordinates" class="js-tabs">
+        <ul id="captures">
+          <li class="c-settings"></li>
+        </ul>
+        <div class="c-content">
+          <div id="content" class="c-container">
+            <div id="coordinates-image"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="colors" class="js-tabs js-colors hidden">
+        <input type="color" />
+        <input type="color" />
+        <input type="color" />
+        <input type="color" />
+        <input type="color" />
+      </div>
+
+      <div id="how-it-works" class="hidden">
+
+      </div>
+
+      <div class="c-content">
+        <div class="c-container">
+          <div class="c-phasmo__header" style="padding-top: 60px">
+            <a class="c-phasmo__button" id="save-settings-order">
+              Save Order
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+  <script src="../settings.js"></script>
+  <script>
+    var content = document.getElementById("captures");
+    var navbar = document.getElementById("content");
+    var sticky = navbar.offsetTop - 50;
+
+    window.onscroll = function() {scrollNav()};
+    window.onresize = function() {sticky = navbar.offsetTop - 50;};
+
+    function scrollNav() {
+      var width = document.body.clientWidth;
+
+      if (window.pageYOffset >= sticky && width > 1024) {
+        if (content.offsetHeight > window.pageYOffset) {
+          navbar.style.height = content.offsetHeight;
+
+          navbar.classList.add("c-sticky")
+          navbar.classList.remove("c-sticky_bottom");
+        } else {
+          navbar.classList.remove("c-sticky");
+          navbar.classList.add("c-sticky_bottom");
+        }
+      } else {
+        navbar.classList.remove("c-sticky");
+        navbar.classList.remove("c-sticky_bottom");
+      }
+    }
+  </script>
 </body>
 </html>

@@ -2,6 +2,7 @@ const { app, BrowserWindow} = require('electron');
 const Window = require('./js/window.js');
 const Notifications = require('./js/notifications.js');
 const Capture = require('./js/capture.js');
+const Settings = require('./js/settings.js');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -14,7 +15,7 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.whenReady().then(() => {const win = new Window(1000, 600);}).then(function () {
+app.whenReady().then(() => {const win = new Window(2400, 600, true);}).then(function () {
   const Notification = new Notifications();
   Notification.welcome.show();
 });
@@ -36,3 +37,4 @@ app.on('activate', () => {
 
 // Init Triggers And Classes
 new Capture();
+new Settings();

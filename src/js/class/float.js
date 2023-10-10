@@ -1,5 +1,7 @@
 class Float {
-    constructor() {}
+    constructor() {
+        this.type = "Float";
+    }
 
     val(text) {
         return parseFloat(text);

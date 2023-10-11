@@ -52,41 +52,100 @@
           <a onclick="setTab(this)" class="c-phasmo__button" data-index-class=".js-colors">
             Colors
           </a>
-          <a class="c-phasmo__button">
-            How it works
+          <a onclick="setTab(this)" class="c-phasmo__button" data-index-class=".js-help">
+            Help
           </a>
         </header>
       </div>
 
-      <div id="coordinates" class="js-tabs">
-        <ul id="captures">
-          <li class="c-settings"></li>
-        </ul>
-        <div class="c-content">
-          <div id="content" class="c-container">
-            <div id="coordinates-image"></div>
+      <div>
+        <div id="coordinates" class="js-tabs">
+          <ul id="captures">
+            <li class="c-settings"></li>
+          </ul>
+          <div class="c-content">
+            <div id="content" class="c-container">
+              <div id="coordinates-image"></div>
+            </div>
+          </div>
+        </div>
+        <div class="c-content js-tabs">
+          <div class="c-container">
+            <div class="c-phasmo__header" style="padding-top: 60px">
+              <a class="c-phasmo__button" id="save-settings-order">
+                Save Order
+              </a>
+            </div>
           </div>
         </div>
       </div>
 
+
       <div id="colors" class="js-tabs js-colors hidden">
-        <input type="color" />
-        <input type="color" />
-        <input type="color" />
-        <input type="color" />
-        <input type="color" />
+        <form id="form-colors" class="c-phasmo__header" style="padding-top: 50px">
+          <a class="c-phasmo__button disabled" style="display:flex; flex-direction: column; padding: 40px 0">
+            Stroke Style
+            <br/>
+            <input type="color" name="strokeStyle" style="text-align: center" />
+          </a>
+          <a class="c-phasmo__button disabled" style="display:flex; flex-direction: column; padding: 40px 0">
+            Line Width
+            <br/>
+            <input type="number" name="lineWidth" style="text-align: center" />
+          </a>
+          <a class="c-phasmo__button disabled" style="display:flex; flex-direction: column; padding: 40px 0">
+            Font
+            <br/>
+            <input type="text" name="font" style="text-align: center" />
+          </a>
+          <a class="c-phasmo__button disabled" style="display:flex; flex-direction: column; padding: 40px 0">
+            Text Align
+            <br/>
+            <input type="text" name="textAlign" style="text-align: center" />
+          </a>
+          <a class="c-phasmo__button disabled" style="display:flex; flex-direction: column; padding: 40px 0">
+            Text Base Line
+            <br/>
+            <input type="text" name="textBaseline" style="text-align: center" />
+          </a>
+          <a class="c-phasmo__button disabled" style="display:flex; flex-direction: column; padding: 40px 0">
+            Fill Style
+            <br/>
+            <input type="color" name="fillStyle" style="text-align: center" />
+          </a>
+        </form>
+        <div class="c-content">
+          <div class="c-container">
+            <div class="c-phasmo__header" style="padding-top: 60px">
+              <a class="c-phasmo__button" id="save-colors">
+                Save Colors
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div id="how-it-works" class="hidden">
-
-      </div>
-
-      <div class="c-content">
-        <div class="c-container">
-          <div class="c-phasmo__header" style="padding-top: 60px">
-            <a class="c-phasmo__button" id="save-settings-order">
-              Save Order
-            </a>
+      <div id="help" class="js-tabs js-help hidden">
+        <div class="c-content">
+          <div class="c-container" style="padding: 30px 500px">
+            <div class="c-help" style="padding: 30px">
+              <h1>Andres&Momo's Phasmophobia Companion</h1>
+              <p style="font-size: 26px; text-align: left">
+                ¿Eres un apasionado de los videojuegos de terror y, en particular, de la popular experiencia paranormal de "Phasmophobia"? Entonces, esta aplicación de escritorio está diseñada específicamente para ti. Bienvenido a "Andres&Momo's Phasmophobia Companion", la herramienta definitiva para los cazadores de fantasmas y amantes de lo paranormal.
+                <br><br>
+                Características Destacadas:
+                <br><br>
+                Gestión de Investigaciones: Registra tus investigaciones y misiones en "Phasmophobia" de manera organizada. Mantén un registro detallado de tus partidas, incluyendo ubicaciones, evidencias recolectadas, y descubrimientos cruciales.
+                <br><br>
+                Mapa Interactivo: Explora los mapas de "Phasmophobia" con un mapa interactivo que te permite marcar ubicaciones clave, objetivos y rutas de escape. Nunca te perderás en una misión de nuevo.
+                <br><br>
+                Notificaciones Personalizadas: Configura notificaciones personalizadas para recordarte momentos críticos durante tus partidas, como el tiempo restante o eventos paranormales.
+                <br><br>
+                Comunidad de Cazadores de Fantasmas: Conéctate con otros jugadores de "Phasmophobia" en nuestra comunidad integrada. Comparte estrategias, consejos y experiencias paranormales con otros entusiastas.
+                <br><br>
+                Con "Andres&Momo's Phasmophobia Companion", elevarás tu experiencia de juego a un nuevo nivel. Deja que esta aplicación sea tu aliada en la lucha contra lo desconocido y descubre todos los secretos que el mundo paranormal de "Phasmophobia" tiene para ofrecer. ¡Descárgala ahora y prepárate para adentrarte en un mundo de misterio y terror!
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -94,7 +153,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-  <script src="../settings.js"></script>
+  <script src="../scripts/settings.js"></script>
   <script>
     var content = document.getElementById("captures");
     var navbar = document.getElementById("content");

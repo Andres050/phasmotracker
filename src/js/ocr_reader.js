@@ -8,10 +8,12 @@ class Reader {
     constructor(dataURL, resolution) {
         this.dataURL = dataURL;
         this.resolution = resolution;
+
+        this.settings = new Settings();
     }
 
     async read() {
-        const settings = new Settings().read();
+        const settings = await this.settings.read();
 
         let types = this.groupBy(settings, "type");
 
@@ -39,7 +41,6 @@ class Reader {
                 rectangle: rectangleItem
             });
 
-            //console.log(capture);
             const item = {
                 name: capture.name,
                 text: this.setTypeText(capture.filter, text.replaceAll('\n', '')),

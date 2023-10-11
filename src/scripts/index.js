@@ -11,7 +11,7 @@ async function takeScreenshot() {
         image.src = args.dataURL;
         image.onload = function () {
             screenshotEl.innerHTML = "";
-            setCoordinates(image, args.data)
+            setCoordinates(image, args.data, args.colors)
         };
 
         setData(args.data);
@@ -31,12 +31,10 @@ async function saveScreenShot() {
 
         currentData1.sort((a, b) =>  a.order - b.order);
         await window.screenshot.nextScreenShot(currentData1);
-    } else {
-        console.log(selectedGhost);
     }
 }
 
-function setCoordinates(img, data) {
+function setCoordinates(img, data, colors) {
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext("2d");
 
@@ -48,16 +46,14 @@ function setCoordinates(img, data) {
 
     for (let i = 0; i < data.length; i++) {
         let capture = data[i];
-        console.log(capture);
         let coordinates = capture.coordinates;
-        ctx.strokeStyle = "#99ff33";
-        ctx.lineWidth = 6;
 
-        ctx.fillStyle = "#abc";
-        ctx.font="36px Georgia";
-        ctx.textAlign="center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "#54a800";
+        ctx.strokeStyle = colors.strokeStyle;
+        ctx.lineWidth = colors.lineWidth;
+        ctx.font = colors.font;
+        ctx.textAlign = colors.textAlign;
+        ctx.textBaseline = colors.textBaseline;
+        ctx.fillStyle = colors.fillStyle;
 
         ctx.fillText(capture.name,coordinates.left+(coordinates.width/2),coordinates.top+(coordinates.height/2));
         ctx.rect(coordinates.left, coordinates.top, coordinates.width, coordinates.height);

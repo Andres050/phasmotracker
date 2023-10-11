@@ -21,3 +21,10 @@ contextBridge.exposeInMainWorld('settings', {
     setSettingsOrder: (data) => ipcRenderer.send('set-settings-order', data),
 });
 
+contextBridge.exposeInMainWorld('colors', {
+    getColors: () => ipcRenderer.send('get-colors'),
+    getColorsResponse: (callback) => {
+        ipcRenderer.on('get-colors-response', (event, args) => callback(event, args));
+    },
+    setColors: (data) => ipcRenderer.send('set-colors', data),
+});

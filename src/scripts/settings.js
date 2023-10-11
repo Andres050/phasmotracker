@@ -26,6 +26,17 @@ function setTab(element) {
     });
 }
 
+async function getColors() {
+    await window.colors.getColors();
+    window.colors.getColorsResponse(async (event, args) => {
+        let colorsData = args.colors;
+
+        for (const data in colorsData) {
+            document.querySelector("input[name="+data+"]").value = colorsData[data];
+        }
+    });
+}
+
 async function getSettings() {
     await window.settings.getSettings();
     window.settings.getSettingsRead(async (event, args) => {
@@ -37,7 +48,7 @@ async function getSettings() {
         image.src = args.dataURL;
         image.onload = function () {
             coordinatesImage.innerHTML = "";
-            setCoordinates(image, args.data)
+            setCoordinates(image, args.data, args.colors)
         };
 
         settingsData.sort((a, b) =>  a.order - b.order);
@@ -114,7 +125,7 @@ function onChangeCoordinates(element) {
     setCoordinatesSingle(image, readInputFields(element))
 }
 
-function setCoordinates(img, data) {
+function setCoordinates(img, data, colors) {
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext("2d");
 
@@ -127,14 +138,13 @@ function setCoordinates(img, data) {
     for (let i = 0; i < data.length; i++) {
         let capture = data[i];
         let coordinates = capture.rectangle;
-        ctx.strokeStyle = "#99ff33";
-        ctx.lineWidth = 6;
 
-        ctx.fillStyle = "#abc";
-        ctx.font="36px Georgia";
-        ctx.textAlign="center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "#54a800";
+        ctx.strokeStyle = colors.strokeStyle;
+        ctx.lineWidth = colors.lineWidth;
+        ctx.font = colors.font;
+        ctx.textAlign = colors.textAlign;
+        ctx.textBaseline = colors.textBaseline;
+        ctx.fillStyle = colors.fillStyle;
 
         ctx.fillText(capture.name,coordinates.left+(coordinates.width/2),coordinates.top+(coordinates.height/2));
         ctx.rect(coordinates.left, coordinates.top, coordinates.width, coordinates.height);
@@ -152,7 +162,7 @@ function setCoordinatesSingle(img, coordinates) {
     canvas.width = img.width;
     canvas.height = img.height;
     ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = "#99ff33";
+    ctx.strokeStyle = "#ff3333";
     ctx.lineWidth = 6;
     ctx.rect(coordinates.left, coordinates.top, coordinates.width, coordinates.height);
     ctx.stroke();
@@ -162,8 +172,8 @@ function setCoordinatesSingle(img, coordinates) {
 
 function readInputFields(element) {
     let data = {};
-    let parentElement = element.parentElement;
-    let childs = parentElement.children;
+    let parentElement = element.parentElement.parentElement;
+    let childs = parentElement.querySelectorAll('input');
 
     for (let i = 0; i < childs.length; i++) {
         let child = childs[i];
@@ -193,13 +203,27 @@ async function setSettingsOrder() {
         };
     });
 
-    console.log(ordersInputs);
     await window.settings.setSettingsOrder(ordersInputs);
+}
+
+async function setColors() {
+    let colors = [];
+
+    document.querySelectorAll('#form-colors input').forEach(function (element, index) {
+        colors[index] = {
+            value: element.value,
+            name: element.getAttribute('name')
+        };
+    });
+
+    await window.colors.setColors(colors);
 }
 
 
 addEventListener("load", async (event) => {
     await getSettings();
+    await getColors();
 });
 
 document.getElementById('save-settings-order').addEventListener('click', setSettingsOrder);
+document.getElementById('save-colors').addEventListener('click', setColors);

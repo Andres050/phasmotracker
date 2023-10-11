@@ -66,3 +66,11 @@ body {
 }
 
 /** TO RESPONSIVE */
+
+.c-help {
+  background-image: url("../assets/bg-white.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
